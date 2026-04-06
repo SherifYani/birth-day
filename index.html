@@ -1,61 +1,137 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <title>Happy Birthday</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ff6b9d">
+  <meta name="description" content="A beautiful, personalized Happy Birthday greeting filled with confetti, balloons, and warm wishes just for you!">
+  <title>🎂 Happy Birthday!</title>
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Google Fonts: Pacifico (display) + Poppins (body) -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="loader">
-                <button id="play">Start</button>
-            </div>
-        </div>
+
+  <!-- ========== CANVAS LAYERS (below everything) ========== -->
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+  <canvas id="snow-canvas" aria-hidden="true"></canvas>
+
+  <!-- ========== LOADER / START SCREEN ========== -->
+  <div class="loader" id="loader" role="dialog" aria-modal="true" aria-label="Birthday greeting start screen">
+    <!-- Floating decorative elements -->
+    <span class="loader-deco deco-1" aria-hidden="true">🎈</span>
+    <span class="loader-deco deco-2" aria-hidden="true">🎁</span>
+    <span class="loader-deco deco-3" aria-hidden="true">⭐</span>
+    <span class="loader-deco deco-4" aria-hidden="true">🎉</span>
+    <span class="loader-deco deco-5" aria-hidden="true">🎈</span>
+
+    <div class="loader-card">
+      <!-- Shimmer top bar -->
+      <div class="loader-shimmer" aria-hidden="true"></div>
+
+      <div class="loader-icon" aria-hidden="true">🎂</div>
+      <h1 class="loader-title">Happy Birthday!</h1>
+      <p class="loader-subtitle">A special celebration awaits you…</p>
+
+
+      <button id="play" class="start-btn" aria-label="Start the birthday celebration">
+        <span class="start-btn-icon" aria-hidden="true"><i class="fas fa-play"></i></span>
+        <span>Let's Celebrate!</span>
+      </button>
+
+      <p class="loader-hint">🔊 Turn up the volume for the full experience</p>
     </div>
-    <audio class="song" controls loop>
-        <source src="music.mp3">
-        </source>
-        Your browser isn't invited for super fun audio time.
-    </audio>
-    <canvas id="confetti"></canvas>
-    <div class="main">
-        <div class="container pt-5">
-            <div class="row">
+  </div>
 
-                <div class="col-12 col-xl-6 mx-auto">
-                    <img src="img/banner.png" alt="">
-                </div>
+  <!-- ========== HIDDEN AUDIO ========== -->
+  <audio id="birthdaySong" loop preload="auto">
+    <source src="music.mp3" type="audio/mpeg">
+    Your browser does not support audio playback.
+  </audio>
 
-                <div class="col-12  text-center">
-                    <div id="name" class="area">Santos</div>
-                </div>
+  <!-- ========== MAIN CONTENT ========== -->
+  <main class="main" id="mainContent" aria-label="Birthday greeting" hidden>
 
-                <div class="col-12 text-center">
-                    <div class="type-wrap">
-                        <div id="typed-strings" class="typing">
-                            <h2>Happy Birthday <i id="nae">Santos</i></h2>
-                            <h2>Have a wonderful day</h2>
-                            <h2>Filled with joy and happiness.</h2>
-                        </div>
-                        <span id="typed" style="white-space:pre;"></span>
-                    </div>
-                </div>
+    <!-- Balloon border (animated, comes from below) -->
+    <img src="img/Balloon-Border.png" alt="Colorful balloon decoration border" class="balloon-border" id="balloonBorder" aria-hidden="true">
 
-                <div class="col-12 col-xl-3 cake">
-                    <img src="img/cake.gif" alt="">
-                </div>
-            </div>
+    <div class="page-wrapper">
+
+      <!-- Banner image -->
+      <div class="banner-wrap fade-in-item">
+        <img src="img/banner.png" alt="Happy Birthday banner" class="banner-img">
+      </div>
+
+      <!-- Personalized name display -->
+      <div class="name-display fade-in-item" id="nameDisplay" aria-label="Birthday person's name">
+        <span id="nameText">Friend</span>
+      </div>
+
+      <!-- ── Glass card: Typing wishes ── -->
+      <article class="glass-card fade-in-item" aria-label="Birthday wishes">
+
+        <!-- Hidden strings for typed.js -->
+        <div id="typed-strings" class="sr-only" aria-hidden="true">
+          <p>Happy Birthday <i id="nae">Friend</i>! 🎂</p>
+          <p>May your day sparkle ✨ with endless joy!</p>
+          <p>Wishing you love, laughter &amp; happiness 🎉</p>
+          <p>You deserve all the wonderful things in life 🌟</p>
+          <p>Here's to a year filled with magic &amp; adventure 🎈</p>
         </div>
-        <img src="img/Balloon-Border.png" width="100%" class="balloon-border">
+
+        <div class="typing-area">
+          <span id="typed" aria-live="polite"></span>
+        </div>
+
+        <!-- Replay button -->
+        <button class="replay-btn" id="replayBtn" aria-label="Replay birthday wishes animation" title="Replay wishes">
+          <i class="fas fa-rotate-right" aria-hidden="true"></i>
+          <span>Replay</span>
+        </button>
+      </article>
+
+      <!-- Cake GIF centered -->
+      <div class="cake-wrap fade-in-item">
+        <img src="img/cake.gif" alt="Animated birthday cake with candles" class="cake-img">
+      </div>
+
+      <!-- Copy link button (appears after typing finishes) -->
+      <div class="share-wrap fade-in-item" id="shareWrap" hidden>
+        <button class="copy-link-btn" id="copyLinkBtn" aria-label="Copy personalized birthday link to clipboard">
+          <i class="fas fa-link" aria-hidden="true"></i>
+          Share this Celebration
+        </button>
+      </div>
     </div>
+
+  </main>
+
+  <!-- ========== MUSIC CONTROL BUTTON ========== -->
+  <button class="music-btn" id="musicBtn" hidden aria-label="Mute music" title="Toggle music">
+    <i class="fas fa-volume-high" id="musicIcon" aria-hidden="true"></i>
+    <span class="music-tooltip">Mute music</span>
+  </button>
+
+  <!-- ========== TOAST NOTIFICATION ========== -->
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ========== SCRIPTS ========== -->
+  <!-- typed.js (kept local) -->
+  <script src="js/typed.min.js"></script>
+  <!-- Main script (vanilla JS – no jQuery, no snowflakes CDN) -->
+  <script src="js/script.js"></script>
+
 </body>
-<script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
-<script src="js/jquery.js"></script>
-<script src="js/typed.min.js"></script>
-<script src="js/script.js"></script>
-
 </html>

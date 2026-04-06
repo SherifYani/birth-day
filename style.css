@@ -1,129 +1,712 @@
-/* customizable snowflake styling */
-.loader button {
-    width: 50%;
-    height: 100px;
-    position: fixed;
-    left: 50%;
-    top: 45%;
-    transform: translateY(-50%);
-    transform: translateX(-50%);
-    background: center no-repeat #fff;
-    z-index: 9999999999999999999999;
-    font-size: 50px;
-    outline: none;
-    box-sizing: border-box;
-    border: none;
-    border-radius: .3em;
-    text-transform: uppercase;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, .16), 0 3px 6px rgba(110, 80, 20, .4),
-        inset 0 -2px 5px 1px rgba(139, 66, 8, 1),
-        inset 0 -1px 1px 3px rgba(250, 227, 133, 1);
-    background-image: linear-gradient(160deg, #a54e07, #b47e11, #fef1a2, #bc881b, #a54e07);
-    border: 1px solid #a55d07;
-    color: rgb(120, 50, 5);
-    text-shadow: 0 2px 2px rgba(250, 227, 133, 1);
-    cursor: pointer;
-    transition: all .2s ease-in-out;
-    background-size: 100% 100%;
-    background-position: center;
+/* ============================================================
+   HAPPY BIRTHDAY – Complete UI/UX Redesign
+   Author: Antigravity AI
+   ============================================================ */
+
+/* ── 0. Custom Properties ─────────────────────────────────── */
+:root {
+  /* Color palette – warm birthday tones */
+  --clr-pink:       #ff6b9d;
+  --clr-pink-light: #ffb3cc;
+  --clr-gold:       #ffd700;
+  --clr-gold-light: #fff0a0;
+  --clr-lavender:   #c9a0ff;
+  --clr-cream:      #fff8f0;
+  --clr-coral:      #ff8c6b;
+  --clr-teal:       #4ecdc4;
+
+  /* Gradient combos */
+  --grad-bg:      linear-gradient(135deg, #1a0533 0%, #2d1060 30%, #4a0080 60%, #1a0040 100%);
+  --grad-card:    linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.05) 100%);
+  --grad-btn:     linear-gradient(135deg, var(--clr-pink) 0%, var(--clr-coral) 50%, var(--clr-gold) 100%);
+  --grad-name:    linear-gradient(135deg, var(--clr-gold) 0%, var(--clr-pink) 50%, var(--clr-lavender) 100%);
+
+  /* Shadows */
+  --shadow-sm:    0 4px 15px rgba(0,0,0,0.2);
+  --shadow-md:    0 8px 32px rgba(0,0,0,0.3);
+  --shadow-lg:    0 20px 60px rgba(0,0,0,0.4);
+  --shadow-glow:  0 0 30px rgba(255,107,157,0.5), 0 0 60px rgba(255,107,157,0.25);
+  --shadow-gold:  0 0 20px rgba(255,215,0,0.6);
+
+  /* Glassmorphism */
+  --glass-bg:     rgba(255,255,255,0.08);
+  --glass-border: rgba(255,255,255,0.18);
+  --glass-blur:   blur(20px);
+
+  /* Typography */
+  --font-display: 'Pacifico', cursive;
+  --font-body:    'Poppins', sans-serif;
+
+  /* Spacing & radius */
+  --radius-sm:    12px;
+  --radius-md:    20px;
+  --radius-lg:    32px;
+  --radius-pill:  9999px;
+
+  /* Transitions */
+  --ease-bounce:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth:  cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast:     0.2s;
+  --dur-mid:      0.4s;
+  --dur-slow:     0.8s;
 }
 
-.golden-btn:focus,
-.golden-btn:hover {
-    background-size: 150% 150%;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23),
-        inset 0 -2px 5px 1px #b17d10,
-        inset 0 -1px 1px 3px rgba(250, 227, 133, 1);
-    border: 1px solid rgba(165, 93, 7, .6);
-    color: rgba(120, 50, 5, .8);
+/* ── 1. Reset & Base ──────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.golden-btn:active {
-    box-shadow: 0 3px 6px rgba(0, 0, 0, .16), 0 3px 6px rgba(110, 80, 20, .4),
-        inset 0 -2px 5px 1px #b17d10,
-        inset 0 -1px 1px 3px rgba(250, 227, 133, 1);
-}
-
-.loader {
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    z-index: 999;
-    background: url(img/back.png) center no-repeat #000;
-}
-
-.song {
-    display: none;
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-    background-color: #FFDAB9;
+  font-family: var(--font-body);
+  background: var(--grad-bg);
+  height: 100vh;
+  overflow: hidden; /* no scroll anywhere */
+  color: var(--clr-cream);
 }
 
-img {
-    width: 100%;
+/* Animated gradient background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(201,160,255,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(255,107,157,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(255,215,0,0.05) 0%, transparent 70%);
+  animation: bgPulse 8s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
 }
 
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+}
+
+/* ── 2. Canvas layers ─────────────────────────────────────── */
+#confetti-canvas,
+#snow-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* never blocks clicks */
+}
+
+#confetti-canvas { z-index: 2; }
+#snow-canvas     { z-index: 1; }
+
+/* ── 3. LOADER / START SCREEN ─────────────────────────────── */
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--grad-bg);
+  transition: opacity var(--dur-slow) var(--ease-smooth),
+              transform var(--dur-slow) var(--ease-smooth);
+}
+
+/* Floating emoji decorations */
+.loader-deco {
+  position: absolute;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  user-select: none;
+  pointer-events: none;
+  animation: floatDeco 6s ease-in-out infinite;
+}
+.deco-1 { top: 10%; left: 8%;  animation-delay: 0s;    animation-duration: 5s; }
+.deco-2 { top: 15%; right: 10%; animation-delay: 1s;   animation-duration: 7s; }
+.deco-3 { bottom: 20%; left: 5%; animation-delay: 0.5s; animation-duration: 6s; }
+.deco-4 { bottom: 15%; right: 8%; animation-delay: 1.5s; animation-duration: 5.5s; }
+.deco-5 { top: 50%; left: 3%;  animation-delay: 2s;    animation-duration: 8s; }
+
+/* Glass card */
+.loader-card {
+  position: relative;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-lg);
+  padding: clamp(2rem, 6vw, 3.5rem);
+  width: min(90vw, 480px);
+  text-align: center;
+  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,0.2);
+  animation: cardBounceIn 0.8s var(--ease-bounce) both;
+  overflow: hidden;
+}
+
+/* Shimmer top accent */
+.loader-shimmer {
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 4px;
+  background: linear-gradient(90deg, transparent, var(--clr-gold), var(--clr-pink), transparent);
+  animation: shimmer 2.5s ease-in-out infinite;
+  border-radius: var(--radius-pill) var(--radius-pill) 0 0;
+}
+
+.loader-icon {
+  font-size: clamp(3rem, 10vw, 5rem);
+  display: block;
+  margin-bottom: 0.75rem;
+  animation: iconBounce 2s ease-in-out infinite;
+  filter: drop-shadow(0 4px 12px rgba(255,215,0,0.5));
+}
+
+.loader-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  background: var(--grad-name);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.loader-subtitle {
+  color: rgba(255,255,255,0.7);
+  font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+  font-weight: 300;
+  margin-bottom: 1.5rem;
+}
+
+/* Start button */
+.start-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 56px;
+  padding: 0.9rem 2.5rem;
+  background: var(--grad-btn);
+  background-size: 200% 200%;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: var(--shadow-glow);
+  transition:
+    transform var(--dur-fast) var(--ease-bounce),
+    box-shadow var(--dur-fast) var(--ease-smooth),
+    background-position var(--dur-mid) var(--ease-smooth);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.3px;
+  width: 100%;
+}
+
+.start-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0);
+  transition: background var(--dur-fast) var(--ease-smooth);
+}
+
+.start-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 0 40px rgba(255,107,157,0.7), 0 0 80px rgba(255,107,157,0.3), var(--shadow-md);
+  background-position: 100% 100%;
+}
+
+.start-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.start-btn-icon {
+  font-size: 1.1em;
+  animation: playIconPulse 1.5s ease-in-out infinite;
+}
+
+.loader-hint {
+  margin-top: 1.25rem;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.45);
+  font-weight: 300;
+}
+
+/* Loader exit animation */
+.loader.fade-out {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+}
+
+/* ── 4. BALLOON BORDER ────────────────────────────────────── */
 .balloon-border {
-    position: fixed;
-    top: 100%;
-    opacity: 0.5;
-    z-index: 99999999;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 900;
+  transform: translateY(-100%); /* start above viewport */
+  opacity: 0;
+  pointer-events: none;
+  /* Flip so balloons hang naturally from the top */
+  transform-origin: center top;
+  filter: drop-shadow(0 8px 24px rgba(255,107,157,0.4));
 }
 
-.area {
-    text-align: center;
-    font-size: 70px;
-    color: #C4515C;
-    letter-spacing: -7px;
-    font-weight: 700;
-    text-transform: uppercase;
-    animation: spin 2s ease-out infinite;
-    text-shadow: 0px 0px 5px #fff, 0px 0px 7px #fff;
+.balloon-border.rise {
+  animation: balloonDrop 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
 }
 
-#nae {
-    text-transform: capitalize;
+/* ── 5. MAIN CONTENT ──────────────────────────────────────── */
+.main {
+  position: relative;
+  z-index: 10;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* top padding leaves room for balloon border */
+  padding: 140px 1rem 0.5rem;
 }
 
-#confetti {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
+.main[hidden] { display: none !important; }
+
+.page-wrapper {
+  width: min(100%, 700px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  animation: pageEnter 0.8s var(--ease-bounce) both;
 }
 
-@keyframes spin {
-    0% {
-        transform: rotateZ(0);
-    }
-
-    25% {
-        transform: rotateZ(10deg);
-    }
-
-    50% {
-        transform: rotateZ(0deg);
-    }
-
-    75% {
-        transform: rotateZ(-10deg);
-    }
+/* Banner */
+.banner-wrap {
+  width: min(100%, 360px);
+  filter: drop-shadow(0 8px 24px rgba(255,107,157,0.4));
 }
 
-.type-wrap {
-    font-size: 25px;
-    color: #C4515C;
-
+.banner-img {
+  width: 100%;
+  animation: bannerFloat 4s ease-in-out infinite;
 }
 
-.cake {
-    transform: translateY(-50%);
-    transform: translateX(-50%);
-    left: 50%;
-    position: absolute;
-    padding-top: 250px;
+/* Name display */
+.name-display {
+  text-align: center;
+}
+
+#nameText {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 7vw, 4rem);
+  background: var(--grad-name);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: nameShimmer 3s linear infinite, nameWiggle 3s ease-in-out infinite;
+  display: inline-block;
+  filter: drop-shadow(0 4px 16px rgba(255,107,157,0.3));
+  line-height: 1.05;
+}
+
+/* Glass card for typed wishes */
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-lg);
+  padding: 0.75rem 1.5rem;
+  width: 100%;
+  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255,255,255,0.15);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: -2px; left: -2px; right: -2px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--clr-lavender), var(--clr-pink), var(--clr-gold), var(--clr-pink), var(--clr-lavender));
+  background-size: 200% 100%;
+  animation: borderGradient 4s linear infinite;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.typing-area {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  font-weight: 500;
+  color: #fff;
+  min-height: 2.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Typed.js cursor glow */
+.typed-cursor {
+  color: var(--clr-pink);
+  font-weight: 300;
+  text-shadow: 0 0 8px var(--clr-pink), 0 0 16px rgba(255,107,157,0.5);
+}
+
+/* Italic name inside typed string */
+#typed i {
+  font-family: var(--font-display);
+  font-style: normal;
+  background: var(--grad-name);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.1em;
+}
+
+/* Replay button */
+.replay-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius-pill);
+  padding: 0.35rem 0.9rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-smooth);
+}
+
+.replay-btn:hover {
+  background: rgba(255,107,157,0.2);
+  border-color: var(--clr-pink);
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.replay-btn i { transition: transform var(--dur-mid) var(--ease-smooth); }
+.replay-btn:hover i { transform: rotate(360deg); }
+
+/* Cake */
+.cake-wrap { width: min(100%, 160px); }
+
+.cake-img {
+  width: 100%;
+  animation: cakeFloat 3.5s ease-in-out infinite;
+  filter: drop-shadow(0 12px 28px rgba(255,107,157,0.3));
+  border-radius: var(--radius-md);
+}
+
+/* ── 6. SHARE / COPY LINK ─────────────────────────────────── */
+.share-wrap {
+  text-align: center;
+  animation: fadeInUp 0.6s var(--ease-bounce) both;
+}
+
+.share-wrap[hidden] { display: none !important; }
+
+.copy-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 48px;
+  padding: 0.75rem 1.8rem;
+  background: rgba(255,215,0,0.12);
+  border: 1.5px solid rgba(255,215,0,0.4);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--clr-gold-light);
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-bounce);
+  backdrop-filter: blur(8px);
+}
+
+.copy-link-btn:hover {
+  background: rgba(255,215,0,0.25);
+  border-color: var(--clr-gold);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: var(--shadow-gold);
+}
+
+.copy-link-btn:active { transform: scale(0.97); }
+
+/* ── 7. MUSIC CONTROL BUTTON ──────────────────────────────── */
+.music-btn {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 999;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  transition: all var(--dur-fast) var(--ease-bounce);
+  opacity: 0;
+  animation: musicBtnAppear 0.6s var(--ease-bounce) 1.5s forwards;
+}
+
+.music-btn[hidden] { display: none !important; }
+
+.music-btn:hover {
+  transform: scale(1.15);
+  border-color: var(--clr-pink);
+  box-shadow: 0 0 20px rgba(255,107,157,0.4), var(--shadow-md);
+  background: rgba(255,107,157,0.2);
+}
+
+.music-btn:hover .music-tooltip { opacity: 1; transform: translateX(-50%) translateY(-8px); }
+
+/* Pulsing ring when music plays */
+.music-btn.playing::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,107,157,0.5);
+  animation: musicRing 1.5s ease-out infinite;
+}
+
+.music-btn.muted { border-color: rgba(255,255,255,0.3); }
+.music-btn.muted::before { display: none; }
+
+/* Vinyl disc inner icon animation */
+.music-btn i {
+  transition: transform var(--dur-mid) var(--ease-smooth);
+}
+.music-btn.playing i {
+  animation: spinRecord 3s linear infinite;
+}
+
+/* Tooltip */
+.music-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  opacity: 0;
+  transition: all var(--dur-fast) var(--ease-smooth);
+  pointer-events: none;
+}
+
+.music-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(0,0,0,0.7);
+}
+
+/* ── 8. TOAST NOTIFICATION ────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(30,30,50,0.9);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #fff;
+  z-index: 9999;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-mid) var(--ease-smooth),
+              transform var(--dur-mid) var(--ease-smooth);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast.success { border-color: var(--clr-teal); }
+.toast.error   { border-color: var(--clr-coral); }
+
+/* ── 9. FADE-IN ITEMS (staggered) ────────────────────────── */
+.fade-in-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s var(--ease-smooth),
+              transform 0.6s var(--ease-bounce);
+}
+.fade-in-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delays */
+.page-wrapper > *:nth-child(1) { transition-delay: 0.1s; }
+.page-wrapper > *:nth-child(2) { transition-delay: 0.2s; }
+.page-wrapper > *:nth-child(3) { transition-delay: 0.35s; }
+.page-wrapper > *:nth-child(4) { transition-delay: 0.5s; }
+.page-wrapper > *:nth-child(5) { transition-delay: 0.65s; }
+
+/* ── 10. KEYFRAME ANIMATIONS ──────────────────────────────── */
+
+@keyframes bgPulse {
+  from { opacity: 0.8; }
+  to   { opacity: 1; }
+}
+
+@keyframes cardBounceIn {
+  0%   { opacity: 0; transform: scale(0.85) translateY(30px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { left: -100%; }
+  50%  { left: 100%; }
+  100% { left: 100%; }
+}
+
+@keyframes floatDeco {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33%       { transform: translateY(-18px) rotate(8deg); }
+  66%       { transform: translateY(-8px) rotate(-5deg); }
+}
+
+@keyframes iconBounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%       { transform: translateY(-10px) scale(1.08); }
+}
+
+@keyframes playIconPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.7; transform: scale(0.9); }
+}
+
+@keyframes pageEnter {
+  0%   { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bannerFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes nameShimmer {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@keyframes nameWiggle {
+  0%, 100% { transform: rotate(0deg); }
+  20%       { transform: rotate(2deg); }
+  40%       { transform: rotate(-2deg); }
+  60%       { transform: rotate(1.5deg); }
+  80%       { transform: rotate(-1.5deg); }
+}
+
+@keyframes borderGradient {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@keyframes cakeFloat {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50%       { transform: translateY(-12px) rotate(1deg); }
+}
+
+@keyframes musicRing {
+  0%   { opacity: 0.8; transform: scale(1); }
+  100% { opacity: 0;   transform: scale(1.5); }
+}
+
+@keyframes spinRecord {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes musicBtnAppear {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes balloonDrop {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  60%  { transform: translateY(0);     opacity: 1; }
+  80%  { transform: translateY(-6px);  opacity: 1; }
+  100% { transform: translateY(0);     opacity: 1; }
+}
+
+/* ── 11. RESPONSIVE ───────────────────────────────────────── */
+@media (max-width: 600px) {
+  .loader-card    { padding: 2rem 1.25rem; }
+  .start-btn      { padding: 0.85rem 1.5rem; }
+  .glass-card     { padding: 0.6rem 0.75rem; }
+  .music-btn      { width: 48px; height: 48px; font-size: 1rem; bottom: 1rem; right: 1rem; }
+  .cake-wrap      { width: min(100%, 120px); }
+  #nameText       { font-size: clamp(1.8rem, 12vw, 3rem); }
+  .main           { padding-top: 110px; }
+  .page-wrapper   { gap: 0.5rem; }
+}
+
+@media (max-width: 360px) {
+  .loader-title { font-size: 1.7rem; }
+}
+
+/* ── 12. REDUCED MOTION ───────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .loader-shimmer,
+  .music-btn.playing::before { display: none; }
 }
